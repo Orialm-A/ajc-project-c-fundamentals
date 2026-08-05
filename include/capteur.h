@@ -20,6 +20,7 @@ typedef float (*fn_capteur)(int heure);
 // --- external declarations -------------------------
 
 // --- defines and macros (scope: public) ------------
+#define RANDOM_SEED 0u
 
 // --- function prototypes (scope: public) -----------
 /* Implémentation 1 — clavier */

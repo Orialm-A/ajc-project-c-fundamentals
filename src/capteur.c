@@ -64,7 +64,7 @@ void capteur_aleatoire_init(unsigned int graine) {
     }
 }
 
-float get_random_temperature(int heure) {
+float capteur_aleatoire(int heure) {
     float angle    = PI * ((float)heure - H_MIN) / 12.0f;
     float tendance = T_BASE + AMPLITUDE * sinf(angle);
 
