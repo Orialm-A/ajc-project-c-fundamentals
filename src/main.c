@@ -1,9 +1,10 @@
 #include <stdio.h>
 
-#include "releves.h"
-#include "alertes.h"
-#include "affichage.h"
-#include "statistics.h"
+#include "../include/releves.h"
+#include "../include/alertes.h"
+#include "../include/affichage.h"
+#include "../include/statistics.h"
+#include "../include/capteur.h"
 
 
 int main(void)

@@ -1,4 +1,4 @@
-#include "releves.h"
+#include "../include/releves.h"
 #include <stdio.h>
 
 void saisir_releves(float * tab)

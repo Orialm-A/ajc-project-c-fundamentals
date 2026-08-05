@@ -9,7 +9,7 @@
  * declared in the corresponding header is part of the public API. */
 
 // --- includes --------------------------------------
-#include "statistics.h"
+#include "../include/statistics.h"
 
 // --- typedefs and structures -----------------------
 

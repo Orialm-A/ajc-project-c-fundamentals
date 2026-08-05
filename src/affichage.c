@@ -1,4 +1,4 @@
-#include "affichage.h"
+#include "../include/affichage.h"
 #include <stdio.h>
 
 

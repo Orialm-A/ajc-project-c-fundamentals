@@ -1,4 +1,4 @@
-#include "alertes.h"
+#include "../include/alertes.h"
 
 #include <stdbool.h>
 #include <stdio.h>
