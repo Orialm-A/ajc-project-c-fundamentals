@@ -4,6 +4,7 @@
 #include "alertes.h"
 #include "affichage.h"
 #include "statistics.h"
+#include "capteur.h"
 
 
 int main(void)
@@ -16,6 +17,7 @@ int main(void)
     Config config = {.seuil_chaud = 35.0, .seuil_froid = -10.0, .seuil_amplitude = 20.0};
 
     int min_idx, max_idx;
+    int nb_releves = 0;
 
     while(choix_utilisateur != 0)
     {
@@ -30,8 +32,12 @@ int main(void)
                 printf("Fin du programme");
             break;
 
-            case 1:
-                saisir_releves(temperatures);
+            case 1: {
+                fn_capteur fn = choisir_capteur();
+                if (fn == NULL) { printf("Annule.\n"); break; }
+                action_saisir(temperatures, &nb_releves, MAX_RELEVES, fn);
+                if (fn == capteur_csv) capteur_csv_fermer();
+            }
             break;
             
             case 2:

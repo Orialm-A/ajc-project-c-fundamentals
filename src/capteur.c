@@ -121,5 +121,7 @@ void  capteur_csv_fermer(void)
 /* Collecteur générique */
 void collecter_releves(float *tab, int n, fn_capteur fn)
 {
-
+    for (int i = 0; i < n; i++) {
+        tab[i] = fn(i);
+    }
 }
