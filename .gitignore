@@ -3,6 +3,9 @@ resources/groupes__729__0.txt
 resources/template.c.pomrt
 resources/template.h.pomrt
 
+# Private notes (not for GitHub)
+resources/TODO.md
+
 # build
 build/
 
