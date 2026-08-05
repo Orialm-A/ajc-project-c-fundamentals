@@ -1,14 +1,17 @@
 #include <stdio.h>
 
-#include "../include/releves.h"
+#include "../include/saisie.h"
 #include "../include/alertes.h"
 #include "../include/affichage.h"
 #include "../include/statistics.h"
 #include "../include/capteur.h"
 
+#define MAX_RELEVES 24
 
 int main(void)
 {
+    capteur_csv_init("data/releves.csv");
+    
     int choix_utilisateur = 1u;
 
     float temperatures[24] = {-50.0, -45.0, -40.0, -35.0, -30.0, -25.0, -20.0, -15.0, -10.0, -5.0, 0.0, 5.0,
@@ -17,6 +20,8 @@ int main(void)
     Config config = {.seuil_chaud = 35.0, .seuil_froid = -10.0, .seuil_amplitude = 20.0};
 
     int min_idx, max_idx;
+    int nb_releves;
+    fn_capteur fn;
 
     while(choix_utilisateur != 0)
     {
@@ -32,6 +37,21 @@ int main(void)
             break;
 
             case 1:
+                fn = choisir_capteur();
+
+                if (fn == NULL)
+                {
+                    printf("Annule.\n");
+                    break;
+                }
+
+                action_saisir(temperatures, &nb_releves, MAX_RELEVES, fn);
+
+                if (fn == capteur_csv) 
+                {
+                    capteur_csv_fermer();
+                }
+
                 saisir_releves(temperatures);
             break;
             
