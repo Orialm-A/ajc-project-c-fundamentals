@@ -1,0 +1,135 @@
+/**
+ *
+ * SPDX-License-Identifier: MIT
+ * Copyright © 2026
+ *
+ */
+
+/* This file contains the implementation for the module. Only content
+ * declared in the corresponding header is part of the public API. */
+
+// --- includes --------------------------------------
+#include "capteur.h"
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+
+// --- typedefs and structures -----------------------
+
+// --- external declarations -------------------------
+
+// --- defines and macros ----------------------------
+#define T_BASE 8.0f
+#define AMPLITUDE 15.0f
+#define H_MIN 5.0f
+#define BRUIT_MAX 1.5f
+#define PI 3.14159265f
+
+#define TEMP_MIN (-50.0f)
+#define TEMP_MAX 60.0f
+
+#define MAX_RELEVES 24
+
+// --- functions prototypes --- (scope: module) ------
+
+// --- static global variable (scope: module) --------
+static float csv_data[MAX_RELEVES];
+static int   csv_count = 0;
+static int   csv_ready = 0;
+
+// --- function implementations (scope: module) ------
+
+// --- function implementations (scope: public) ------
+
+/* Implémentation 1 — clavier */
+float capteur_manuel(int heure)
+{
+    float temp = TEMP_MIN - 1;
+
+    while((temp < TEMP_MIN) || (temp > TEMP_MAX))
+    {
+        printf("Heure %02d : ", heure);
+        scanf("%f", &temp);
+    }
+
+    return temp;
+}
+
+/* Implémentation 2 — simulation aléatoire */
+void capteur_aleatoire_init(unsigned int graine) {
+    if (graine == 0) {
+        srand(time(NULL));
+    } else {
+        srand(graine);
+    }
+}
+
+float capteur_aleatoire(int heure) {
+    float angle    = PI * ((float)heure - H_MIN) / 12.0f;
+    float tendance = T_BASE + AMPLITUDE * sinf(angle);
+
+    float bruit = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
+    bruit *= BRUIT_MAX;
+
+    float temperature = tendance + bruit;
+
+    if (temperature < TEMP_MIN) temperature = TEMP_MIN;
+    if (temperature > TEMP_MAX) temperature = TEMP_MAX;
+
+    return temperature;
+}
+
+/* Implémentation 3 — fichier CSV */
+int capteur_csv_init(const char *chemin)
+{
+    FILE * ptr_file = fopen(chemin, "r");
+    char ligne[64] = {0};
+    float val;
+
+    if(ptr_file != NULL)
+    {
+        fgets(ligne, sizeof(ligne), ptr_file);
+
+        while(ligne[0] != EOF)
+        {
+            if((ligne[0] != '#') && (ligne[0] != '\n') && (ligne[0] != '\r'))
+            {
+                sscanf(ligne, "%f", &val);
+
+                if((val < TEMP_MIN) || (val > TEMP_MAX))
+                {
+                    fwrite("VALEUR HORS PLAGE", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                }
+
+                csv_data[csv_count++] = val;
+            }
+
+            fgets(ligne, sizeof(ligne), ptr_file);
+        }
+
+        csv_ready = 1;
+
+        return csv_count;
+    }
+    else
+    {
+        perror("fopen");
+        return -1;
+    }
+}
+
+float capteur_csv(int heure)
+{
+    return 0.0;
+}
+
+void  capteur_csv_fermer(void)
+{
+
+}
+
+/* Collecteur générique */
+void collecter_releves(float *tab, int n, fn_capteur fn)
+{
+
+}
