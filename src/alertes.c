@@ -1,12 +1,11 @@
 #include "alertes.h"
+#include "statistics.h"
 
 #include <stdbool.h>
 #include <stdio.h>
 
 void analyser_alertes(float *tab, int n, Config *cfg)
 {
-    float temp_min = 0.0, temp_max = 0.0;
-
     bool alerte_canicule = false;
     bool alerte_gel = false;
     bool alerte_amplitude = false;
@@ -30,22 +29,13 @@ void analyser_alertes(float *tab, int n, Config *cfg)
         {
             printf("\n");
         }
-
-        if(temp_min > tab[i])
-        {
-            temp_min = tab[i];
-        }
-
-        if(temp_max < tab[i])
-        {
-            temp_max = tab[i];
-        }
-
     }
 
-    printf("Amplitude globale : %.2f C", (temp_max - temp_min));
+    float amplitude = calculer_amplitude(tab, n);
 
-    if((temp_max - temp_min) > cfg->seuil_amplitude)
+    printf("Amplitude globale : %.2f C", amplitude);
+
+    if(amplitude > cfg->seuil_amplitude)
     {
         printf(" [ECART]\n");
         alerte_amplitude = true;
