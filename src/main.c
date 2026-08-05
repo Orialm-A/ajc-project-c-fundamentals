@@ -21,9 +21,13 @@ void afficher_menu(void)
 
 int main(void)
 {
-    int choix_utilisateur = 1;
-    float temperatures[24];
-    Config config = {.seuil_chaud = 35.0, .seuil_froid = 0.0, .seuil_amplitude = 20.0 };
+    int choix_utilisateur = 1u;
+
+    float temperatures[24] = {-50.0, -45.0, -40.0, -35.0, -30.0, -25.0, -20.0, -15.0, -10.0, -5.0, 0.0, 5.0,
+                              10.0, 15.0, 17.5, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0};
+
+    Config config = {.seuil_chaud = 35.0, .seuil_froid = 0.0, .seuil_amplitude = 20.0};
+
     int min_idx, max_idx;
 
     while(choix_utilisateur != 0)
@@ -31,9 +35,14 @@ int main(void)
 
         afficher_menu();
         scanf("%d", &choix_utilisateur);
+        printf("\n");
         
-        switch (choix_utilisateur)
+        switch(choix_utilisateur)
         {
+            case 0:
+                printf("Fin du programme");
+            break;
+
             case 1:
                 saisir_releves(temperatures);
             break;
@@ -45,7 +54,7 @@ int main(void)
             break;
 
             case 3:
-                analyser_alertes(temperatures, 12, &config);
+                analyser_alertes(temperatures, 24, &config);
             break;
 
             case 4:
@@ -53,19 +62,15 @@ int main(void)
             break;
 
             case 5:
-                temperatures[0] = 15.7;
-                temperatures[1] = 32.4;
-                afficher_historigramme(temperatures, 2, config);
-            break;
-
-            case 6:
-                printf("Fin du programme\n");
+                afficher_historigramme(temperatures, 24, config);
             break;
 
             default:
-                printf("ERREUR\n");
+                printf("ERREUR !! La valeur doit etre entre 0 et 6\n");
             break;
         }
+
+        printf("\n");
     }
 
     return 0;

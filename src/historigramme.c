@@ -35,19 +35,25 @@ float min(float * tab, int taille)
 
 void afficher_historigramme(float * tab, int taille, Config cfg)
 {
-    int degres_par_etoiles = 110 / 5;
+    int degres_par_etoiles = 110 / 10;
     printf("degres par etoile : %d\n", degres_par_etoiles);
 
     int etoiles_par_colonnes[taille];
 
-    for(int i = 0; i < taille; i++)
-    {
-        etoiles_par_colonnes[i] = tab[i] / degres_par_etoiles;
-        printf("etoiles par colonne : %d\n", etoiles_par_colonnes[i]);
-    }
 
     for(int i = 0; i < taille; i++)
     {
+        etoiles_par_colonnes[i] = (tab[i] + 50.0) / degres_par_etoiles;
         
+        printf("Heure %d ", i);
+        if(i < 10) printf(" ");
+        printf("| ");
+
+        for(int j = 0; j < etoiles_par_colonnes[i]; j++)
+        {
+            printf("* ");
+        }
+        printf("\n");
     }
+
 }
