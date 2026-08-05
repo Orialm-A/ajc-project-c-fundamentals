@@ -14,6 +14,7 @@
 
 #include "unity.h"
 #include "test_statistics.h"
+#include "test_random_sensor.h"
 // --- typedefs and structures -----------------------
 
 // --- external declarations -------------------------
@@ -36,6 +37,8 @@ int main(void) {
     RUN_TEST(tests_trouver_minimum);
     RUN_TEST(tests_trouver_maximum);
     RUN_TEST(tests_calculer_amplitude);
+
+    RUN_TEST(test_get_random_temperature_stays_in_allowed_range);
 
     return UNITY_END();
 }
