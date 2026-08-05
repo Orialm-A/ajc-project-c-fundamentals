@@ -22,19 +22,26 @@ typedef struct TemperatureTests {
 
 // Place in test_statistics.c (file scope)
 static temperatures_tests_t TEST_CASES[] = {
-    {
+    {   // easy
         .temperatures = {10.0f, 20.0f, 30.0f, 40.0f, 50.0f},
         .expected_average = 30.0f,
         .expected_min = 10.0f,
         .expected_max = 50.0f,
         .expected_amplitude = 40.0f
     },
-    {
+    {   // Mixed
         .temperatures = {-5.3f, 0.0f, 51.0f, -23.7f, 28.9f},
         .expected_average = 10.18f,
         .expected_min = -23.7f,
         .expected_max = 51.0f,
         .expected_amplitude = 74.7f
+    },
+    {   // limits
+        .temperatures = {100.0f, 100.0f, 100.0f, 100.0f, 100.0f},
+        .expected_average = 100.0f,
+        .expected_min = 100.0f,
+        .expected_max = 100.0f,
+        .expected_amplitude = 0.0f
     }
 };
 
@@ -52,17 +59,23 @@ void tests_calculer_moyenne(void) {
 
 void tests_trouver_minimum(void) {
     for (size_t test_id = 0; test_id < NUM_TEST_CASES; test_id++) {
-        int min_index = -1;
+        int min_index = DEFAULT_INDEX;
         float min =  trouver_minimum(TEST_CASES[test_id].temperatures, NUMBER_TEMPERATURE, &min_index);
+
         TEST_ASSERT_FLOAT_WITHIN(0.001f, TEST_CASES[test_id].expected_min, min);
+
+        TEST_ASSERT_NOT_EQUAL(-1, min_index);
     }
 }
 
 void tests_trouver_maximum(void) {
     for (size_t test_id = 0; test_id < NUM_TEST_CASES; test_id++) {
-        int max_index = -1;
+        int max_index = DEFAULT_INDEX;
         float max = trouver_maximum(TEST_CASES[test_id].temperatures, NUMBER_TEMPERATURE, &max_index);
+
         TEST_ASSERT_FLOAT_WITHIN(0.001f, TEST_CASES[test_id].expected_max, max);
+
+        TEST_ASSERT_NOT_EQUAL(-1, max_index);
     }
 }
 

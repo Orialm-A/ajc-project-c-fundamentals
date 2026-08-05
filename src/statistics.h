@@ -18,11 +18,14 @@
 // --- external declarations -------------------------
 
 // --- defines and macros (scope: public) ------------
-
+#define DEFAULT_INDEX -1
 // --- function prototypes (scope: public) -----------
 
 /**
  * @brief Retourne la moyenne des relevés
+ *
+ * @pre tab != NULL
+ * @pre n > 0
  */
 float calculer_moyenne(
     float *tab, ///< Array of values
@@ -31,26 +34,35 @@ float calculer_moyenne(
 
 /**
  * @brief Retourne le minimum et stocke son index dans `*idx`
+ *
+ * @pre tab != NULL
+ * @pre n > 0
  */
 float trouver_minimum(
     float *tab, ///< Array of values
     int n, ///< Length of the array
-    int *idx ///< minimum's index'
+    int *idx ///< Index of the minimum value
 
 );
 
 /**
  * @brief Retourne le maximum et stocke son index dans `*idx`
+ *
+ * @pre tab != NULL
+ * @pre n > 0
  */
 float trouver_maximum(
     float *tab, ///< Array of values
     int n, ///< Length of the array
-    int *idx ///< maximum's index'
+    int *idx ///< Index of the maximum value
 
 );
 
 /**
  * @brief Retourne `max - min`
+ *
+ * @pre tab != NULL
+ * @pre n > 0
  */
 float calculer_amplitude(
     float *tab, ///< Array of values

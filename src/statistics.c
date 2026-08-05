@@ -16,8 +16,6 @@
 // --- external declarations -------------------------
 
 // --- defines and macros ----------------------------
-#define MIN_TEMP_LOCAL -50.0  // Replace with whatever Antoine will have defined in his temperature module
-#define MAX_TEMP_LOCAL 60.0  // Replace with whatever Antoine will have defined in his temperature module
 
 // --- functions prototypes --- (scope: module) ------
 
@@ -52,10 +50,11 @@ float trouver_minimum(
     int n,
     int *idx
 ) {
-    float min = MAX_TEMP_LOCAL;
+    float min = tab[0];
+    *idx = 0;
 
-    for(int i = 0; i < n; i++) {
-        if(tab[i] < min) {
+    for (int i = 1; i < n; i++) {
+        if (tab[i] < min) {
             min = tab[i];
             *idx = i;
         }
@@ -70,10 +69,11 @@ float trouver_maximum(
     int *idx
 
 ) {
-    float max = MIN_TEMP_LOCAL;
+    float max = tab[0];
+    *idx = 0;
 
-    for(int i = 0; i < n; i++) {
-        if(tab[i] > max) {
+    for (int i = 1; i < n; i++) {
+        if (tab[i] > max) {
             max = tab[i];
             *idx = i;
         }
@@ -86,11 +86,11 @@ float calculer_amplitude(
     float *tab,
     int n
 ) {
-    int min_index = -1;
-    int max_index = -1;
+    int min_index = DEFAULT_INDEX;
+    int max_index = DEFAULT_INDEX;
 
     float min = trouver_minimum(tab, n, &min_index);
-    // if(min_index == -1)
+    // if(min_index == -1) -- Can't do anything in case of failure
 
     float max = trouver_maximum(tab, n, &max_index);
 
