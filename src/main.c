@@ -1,22 +1,9 @@
 #include <stdio.h>
 
-#include "releves.h"
-#include "alertes.h"
-#include "historigramme.h"
-#include "statistics.h"
-
-
-void afficher_menu(void)
-{
-    printf("=== Station Meteo ===\n");
-    printf("1. Saisir des releves\n");
-    printf("2. Afficher les statistiques\n");
-    printf("3. Afficher les alertes\n");
-    printf("4. Modifier les seuils d'alerte\n");
-    printf("5. Afficher l'histogramme\n");
-    printf("0. Quitter\n");
-    printf("Choix : ");
-}
+#include "../include/releves.h"
+#include "../include/alertes.h"
+#include "../include/affichage.h"
+#include "../include/statistics.h"
 
 
 int main(void)
