@@ -1,0 +1,11 @@
+# External files
+resources/groupes__729__0.txt
+resources/template.c.pomrt
+resources/template.h.pomrt
+
+# build
+build/
+
+# Temporary files
+*.swp
+*.kate-swp
