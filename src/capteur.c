@@ -4,8 +4,13 @@
 
 #define MAX_RELEVES 24
 
-#define TEMP_MIN (-50.0f)
-#define TEMP_MAX 60.0f
+#define TEMP_MIN  (-50.0f)
+#define TEMP_MAX  60.0f
+#define T_BASE    8.0f
+#define AMPLITUDE 15.0f
+#define H_MIN     5.0f
+#define BRUIT_MAX 1.5f
+#define PI        3.14159265f
 
 static float csv_data[MAX_RELEVES];
 static int   csv_count = 0;
@@ -58,7 +63,7 @@ int capteur_csv_init(const char *chemin)
 
                 if((val < TEMP_MIN) || (val > TEMP_MAX))
                 {
-                    fwrite("VALEUR HORS PLAGE", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                    fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
                 }
 
                 csv_data[csv_count++] = val;
@@ -68,6 +73,8 @@ int capteur_csv_init(const char *chemin)
         }
 
         csv_ready = 1;
+
+        fclose(ptr_file);
 
         return csv_count;
     }
@@ -81,13 +88,21 @@ int capteur_csv_init(const char *chemin)
 
 float capteur_csv(int heure)
 {
-    return 0.0;
+    if((csv_ready == 1) && (heure >= 0) && (heure <= (csv_count - 1)))
+    {
+        return csv_data[heure];
+    }
+    else
+    {
+        return (TEMP_MIN - 1.0f);
+    }
 }
 
 
 void  capteur_csv_fermer(void)
 {
-
+    csv_count = 0;
+    csv_ready = 0;
 }
 
 
