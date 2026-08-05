@@ -19,7 +19,7 @@ fn_capteur choisir_capteur(void) {
     switch(choix_utilisateur)
     {
         case 1:
-            return saisir_releves;
+            return capteur_manuel;
             break;
 
         case 2:
@@ -86,15 +86,11 @@ void saisir_releves(float * tab)
 
 void action_saisir(float *tab, int *nb_releves, int n_max, fn_capteur fn) {
 
-    if(fn == saisir_releves) {
-        saisir_releves(tab);
-    } else {
-        int nb_releves = 0;
-        while((nb_releves < 1) || (nb_releves > n_max))
-        {
-            printf("Nombre de releves (24 max) ?\n");
-            scanf("%d", &nb_releves);
-        }
-        collecter_releves(tab, nb_releves, fn);
+    *nb_releves = 0;
+    while((*nb_releves < 1) || (*nb_releves > n_max))
+    {
+        printf("Nombre de releves (24 max) ?\n");
+        scanf("%d", nb_releves);
     }
+    collecter_releves(tab, *nb_releves, fn);
 }
