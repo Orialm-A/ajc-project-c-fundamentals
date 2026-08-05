@@ -6,6 +6,7 @@ fn_capteur choisir_capteur(void) {
 
     int choix_utilisateur = 1u;
     int user_seed;
+    int error_code;
 
     printf("--- Source de donnees ---\n");
     printf("  1. Saisie manuelle (clavier)\n");
@@ -22,19 +23,26 @@ fn_capteur choisir_capteur(void) {
             return capteur_manuel;
             break;
 
-        case 2:
-            printf("Select seed (int) - Leave empty for random:");
-            if(scanf("%d", &user_seed) == 0) {
+        case 2: {
+            int seed_choice;
+
+            printf("Graine : (1) fixe=42  (2) temporelle : ");
+            scanf("%d", &seed_choice);
+
+            if(seed_choice == 1) {
+                user_seed = 42;
+            } else {
                 user_seed = RANDOM_SEED;
             }
+
             capteur_aleatoire_init(user_seed);
             return capteur_aleatoire;
-            break;
+        }
+        break;
 
         case 3:
-            int error_code;
             error_code = capteur_csv_init("data/releves.csv");
-            if(error_code == 1) {
+            if(error_code == -1) {
                 return NULL;
             }
             return capteur_csv;
