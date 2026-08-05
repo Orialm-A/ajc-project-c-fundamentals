@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "statistics.h"
+
 // --- typedefs and structures -----------------------
 
 // --- external declarations -------------------------

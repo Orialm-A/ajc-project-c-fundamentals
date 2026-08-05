@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "unity.h"
+#include "test_statistics.h"
 // --- typedefs and structures -----------------------
 
 // --- external declarations -------------------------
@@ -23,9 +25,17 @@
 // --- static global variable (scope: module) --------
 
 // --- function implementations (scope: module) ------
+void setUp(void) {}
+void tearDown(void) {}
 
 // --- function implementations (scope: public) ------
-int main(int argc, char *argv[]) {
-    printf("Hello, Tests!\n");
-    return 0;
+int main(void) {
+    UNITY_BEGIN();
+
+    RUN_TEST(tests_calculer_moyenne);
+    RUN_TEST(tests_trouver_minimum);
+    RUN_TEST(tests_trouver_maximum);
+    RUN_TEST(tests_calculer_amplitude);
+
+    return UNITY_END();
 }
