@@ -15,7 +15,7 @@ add_executable(my_app
     src/main.c
     src/statistics.c
     src/alertes.c
-    src/releves.c
+    src/saisie.c
     src/affichage.c
     src/capteur.c
 )
