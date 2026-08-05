@@ -9,12 +9,10 @@
  * declared in the corresponding header is part of the public API. */
 
 // --- includes --------------------------------------
-#include <stdio.h>
-#include <stdlib.h>
+#include "capteur.h"
+#include <math.h>
+#include <time.h>
 
-#include "unity.h"
-#include "test_statistics.h"
-#include "test_random_sensor.h"
 // --- typedefs and structures -----------------------
 
 // --- external declarations -------------------------
@@ -26,19 +24,27 @@
 // --- static global variable (scope: module) --------
 
 // --- function implementations (scope: module) ------
-void setUp(void) {}
-void tearDown(void) {}
 
 // --- function implementations (scope: public) ------
-int main(void) {
-    UNITY_BEGIN();
+void capteur_aleatoire_init(unsigned int graine) {
+    if (graine == 0) {
+        srand(time(NULL));
+    } else {
+        srand(graine);
+    }
+}
 
-    RUN_TEST(tests_calculer_moyenne);
-    RUN_TEST(tests_trouver_minimum);
-    RUN_TEST(tests_trouver_maximum);
-    RUN_TEST(tests_calculer_amplitude);
+float get_random_temperature(int heure) {
+    float angle    = PI * ((float)heure - H_MIN) / 12.0f;
+    float tendance = T_BASE + AMPLITUDE * sinf(angle);
 
-    RUN_TEST(test_get_random_temperature_stays_in_allowed_range);
+    float bruit = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
+    bruit *= BRUIT_MAX;
 
-    return UNITY_END();
+    float temperature = tendance + bruit;
+
+    if (temperature < TEMP_MIN) temperature = TEMP_MIN;
+    if (temperature > TEMP_MAX) temperature = TEMP_MAX;
+
+    return temperature;
 }

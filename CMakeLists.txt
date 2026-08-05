@@ -5,7 +5,11 @@ project(MyProject LANGUAGES C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-option(ENABLE_TESTS "Build unit tests" OFF)
+option(ENABLE_TESTS "Build unit tests using Unity" OFF)
+
+# ==============================================================================
+# Main application
+# ==============================================================================
 
 add_executable(my_app
     src/main.c
@@ -13,11 +17,21 @@ add_executable(my_app
     src/alertes.c
     src/releves.c
     src/affichage.c
+    src/capteur.c
 )
 
 target_include_directories(my_app PRIVATE
-    include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+# Required for sinf()
+target_link_libraries(my_app PRIVATE
+    m
+)
+
+# ==============================================================================
+# Unit tests
+# ==============================================================================
 
 if(ENABLE_TESTS)
     enable_testing()
@@ -25,14 +39,23 @@ if(ENABLE_TESTS)
     add_executable(unit_tests
         tests/test_main.c
         tests/test_statistics.c
+        tests/test_random_sensor.c
+
         src/statistics.c
+        src/capteur.c
+
         external/unity/src/unity.c
     )
 
     target_include_directories(unit_tests PRIVATE
-        include
-        tests
-        external/unity/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/unity/src
+    )
+
+    # Required for sinf()
+    target_link_libraries(unit_tests PRIVATE
+        m
     )
 
     add_test(
