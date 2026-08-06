@@ -5,6 +5,6 @@
 
 void analyser_alertes(float *tab, int n, Config *cfg);
 
-void modification_alertes(Config * cfg);
+
 
 #endif
