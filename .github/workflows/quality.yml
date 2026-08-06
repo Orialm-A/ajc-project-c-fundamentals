@@ -3,7 +3,7 @@ name: Code static analysis
 on: [push, pull_request]
 
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
 
     steps:
