@@ -91,6 +91,8 @@ int capteur_csv_init(const char *chemin)
 
                 csv_data[csv_count++] = val;
             }
+
+            fgets(ligne, sizeof(ligne), ptr_file);
         }
 
         csv_ready = 1;
