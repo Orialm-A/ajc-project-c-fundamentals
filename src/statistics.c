@@ -27,7 +27,7 @@
 
 
 float calculer_moyenne(
-    float *tab,
+    const float *tab,
     int n
 ) {
 
@@ -46,7 +46,7 @@ float calculer_moyenne(
 }
 
 float trouver_minimum(
-    float *tab,
+    const float *tab,
     int n,
     int *idx
 ) {
@@ -64,7 +64,7 @@ float trouver_minimum(
 }
 
 float trouver_maximum(
-    float *tab,
+    const float *tab,
     int n,
     int *idx
 
@@ -83,7 +83,7 @@ float trouver_maximum(
 }
 
 float calculer_amplitude(
-    float *tab,
+    const float *tab,
     int n
 ) {
     int min_index = DEFAULT_INDEX;
