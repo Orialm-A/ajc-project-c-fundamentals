@@ -50,7 +50,7 @@ int main(void)
             break;
 
             case 5:
-                afficher_historigramme(temperatures, nb_releves, config);
+                afficher_historigramme(temperatures, nb_releves);
             break;
 
             default:
