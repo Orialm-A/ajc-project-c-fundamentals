@@ -8,7 +8,7 @@
 
 int main(void)
 {
-    int choix_utilisateur = 1u;
+    int choix_utilisateur;
 
     float temperatures[24] = {0.0f};
 
@@ -16,7 +16,7 @@ int main(void)
 
     int nb_releves = 0;
 
-    while(choix_utilisateur != 0)
+    do
     {
 
         afficher_menu();
@@ -59,7 +59,7 @@ int main(void)
         }
 
         printf("\n");
-    }
+    } while(choix_utilisateur != 0);
 
     return 0;
 }
