@@ -1,4 +1,5 @@
 #include "affichage.h"
+#include "statistics.h"
 #include <stdio.h>
 
 
@@ -49,4 +50,24 @@ void modification_alertes(Config * cfg)
 
     printf("Nouveau seuil d'amplitude : ");
     scanf("%f", &cfg->seuil_amplitude);
+}
+
+void afficher_rapport(float *tab, int n) {
+
+    int min_idx, max_idx;
+
+    /* I separated the call from the printf. Why?
+    * tldr, C doesn't guarantee call/evaluation order,
+    * so `max_idx` could have any value when evaluated for the
+    * print. */
+    float moyenne = calculer_moyenne(tab, n);
+    float min = trouver_minimum(tab, n, &min_idx);
+    float max = trouver_maximum(tab, n, &max_idx);
+    float amplitude = calculer_amplitude(tab, n);
+
+    printf("Moyenne   : %.2f°C\n", moyenne);
+    printf("Minimale  : %.2f°C Heure : %d\n", min, min_idx);
+    printf("Maximale  : %.2f°C Heure : %d\n", max, max_idx);
+    printf("Amplitude : %.2f°C Entre %dh et %dh\n", amplitude, min_idx, max_idx);
+
 }

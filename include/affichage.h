@@ -9,4 +9,6 @@ void afficher_historigramme(float * tab, int taille, Config cfg);
 
 void modification_alertes(Config * cfg);
 
+void afficher_rapport(float *tab, int n);
+
 #endif
