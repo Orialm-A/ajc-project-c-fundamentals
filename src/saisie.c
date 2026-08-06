@@ -1,12 +1,14 @@
 #include "../include/saisie.h"
+#include "../include/config.h"
 #include <stdio.h>
+
 
 void saisir_releves(float * tab)
 {
     float temp_user;
     int nb_releves = 0;
 
-    while((nb_releves < 1) || (nb_releves > 24))
+    while((nb_releves < 1) || (nb_releves > MAX_RELEVES))
     {
         printf("Nombre de releves (24 max) ?\n");
         scanf("%d", &nb_releves);
@@ -37,5 +39,70 @@ void saisir_releves(float * tab)
 
 fn_capteur choisir_capteur(void)
 {
-    return capteur_csv;
+    int choix_utilisateur = 1u;
+    int user_seed;
+    int error_code;
+
+    printf("--- Source de donnees ---\n");
+    printf("  1. Saisie manuelle (clavier)\n");
+    printf("  2. Simulation aleatoire\n");
+    printf("  3. Fichier CSV (data/releves.csv)\n");
+    printf("  0. Annuler\n");
+
+    scanf("%d", &choix_utilisateur);
+    printf("\n");
+
+    switch(choix_utilisateur)
+    {
+        case 1:
+            return capteur_manuel;
+            break;
+
+        case 2: {
+            int seed_choice;
+
+            printf("Graine : (1) fixe=42  (2) temporelle : ");
+            scanf("%d", &seed_choice);
+
+            if(seed_choice == 1) {
+                user_seed = 42;
+            } else {
+                user_seed = RANDOM_SEED;
+            }
+
+            capteur_aleatoire_init(user_seed);
+            return capteur_aleatoire;
+        }
+        break;
+
+        case 3:
+            error_code = capteur_csv_init("data/releves.csv");
+
+            if(error_code == -1)
+            {
+                return NULL;
+            }
+
+            return capteur_csv;
+        break;
+
+        case 0:
+            return NULL;
+        break;
+
+        default:
+            return NULL;
+        break;
+    }
+}
+
+void action_saisir(float *tab, int *nb_releves, int n_max, fn_capteur fn)
+{
+    *nb_releves = 0;
+    while((*nb_releves < 1) || (*nb_releves > n_max))
+    {
+        printf("Nombre de releves (24 max) ?\n");
+        scanf("%d", nb_releves);
+    }
+    collecter_releves(tab, *nb_releves, fn);
 }

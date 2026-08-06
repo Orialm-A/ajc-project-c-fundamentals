@@ -1,16 +1,8 @@
 #include "../include/capteur.h"
+#include "../include/config.h"
 
 #include <stdio.h>
 
-#define MAX_RELEVES 24
-
-#define TEMP_MIN  (-50.0f)
-#define TEMP_MAX  60.0f
-#define T_BASE    8.0f
-#define AMPLITUDE 15.0f
-#define H_MIN     5.0f
-#define BRUIT_MAX 1.5f
-#define PI        3.14159265f
 
 static float csv_data[MAX_RELEVES];
 static int   csv_count = 0;
@@ -53,20 +45,24 @@ int capteur_csv_init(const char *chemin)
 
     if(ptr_file != NULL)
     {
-        fgets(ligne, sizeof(ligne), ptr_file);
-
-        while(ligne[0] != EOF)
+        while(fgets(ligne, sizeof(ligne), ptr_file) != NULL)
         {
             if((ligne[0] != '#') && (ligne[0] != '\n') && (ligne[0] != '\r'))
             {
-                sscanf(ligne, "%f", &val);
-
-                if((val < TEMP_MIN) || (val > TEMP_MAX))
+                if(sscanf(ligne, "%f", &val) != 1)
                 {
-                    fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                    printf("ERREUR de lecture de %s a la ligne %d. Passage a la ligne suivante\n", chemin, (csv_count+1));
+                    csv_count++;
                 }
+                else
+                {
+                    if((val < TEMP_MIN) || (val > TEMP_MAX))
+                    {
+                        fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                    }
 
-                csv_data[csv_count++] = val;
+                    csv_data[csv_count++] = val;
+                }
             }
 
             fgets(ligne, sizeof(ligne), ptr_file);
