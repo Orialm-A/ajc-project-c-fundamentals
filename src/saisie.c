@@ -10,7 +10,6 @@ static void helper_csv_choice(void);
 fn_capteur choisir_capteur(void) {
 
     int choix_utilisateur = 1u;
-    int user_seed;
 
     printf("--- Source de donnees ---\n");
     printf("  1. Saisie manuelle (clavier)\n");
@@ -33,6 +32,7 @@ fn_capteur choisir_capteur(void) {
 
         case 2: {
             int seed_choice;
+            int user_seed;
 
             printf("Graine : (1) fixe=42  (2) temporelle : ");
             scanf("%d", &seed_choice);
@@ -62,39 +62,6 @@ fn_capteur choisir_capteur(void) {
             break;
     }
 
-}
-
-void saisir_releves(float * tab)
-{
-    float temp_user;
-    int nb_releves = 0;
-
-    while((nb_releves < 1) || (nb_releves > 24))
-    {
-        printf("Nombre de releves (24 max) ?\n");
-        scanf("%d", &nb_releves);
-    }
-
-    for(int i = 0; i < nb_releves; i++)
-    {
-        printf("Heure %2d : ", i);
-        scanf("%f", &temp_user);
-
-        while((temp_user < -50.0) || (temp_user > 60.0))
-        {
-            printf("ERREUR : valeur hors plage [-50.0 ; 60.0] ! Veuillez resaisir : \n");
-
-            scanf("%f", &temp_user);
-        }
-
-        tab[i] = temp_user;
-    }
-
-    printf("--- Releves enregistres---\n");
-    for(int i = 0; i < nb_releves; i++)
-    {
-        printf("Heure %2d : %.2f C\n", i, tab[i]);
-    }
 }
 
 void action_saisir(float *tab, int *nb_releves, int n_max, fn_capteur fn) {

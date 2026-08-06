@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-void afficher_historigramme(float * tab, int taille)
+void afficher_historigramme(const float * tab, int taille)
 {
     int degres_par_etoiles = 110 / 10;
     printf("degres par etoile : %d\n", degres_par_etoiles);
@@ -52,7 +52,7 @@ void modification_alertes(Config * cfg)
     scanf("%f", &cfg->seuil_amplitude);
 }
 
-void afficher_rapport(float *tab, int n) {
+void afficher_rapport(const float *tab, int n) {
 
     int min_idx, max_idx;
 
