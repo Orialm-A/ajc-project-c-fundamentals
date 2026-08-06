@@ -17,6 +17,10 @@
 // --- external declarations -------------------------
 
 // --- defines and macros (scope: public) ------------
+#define TEMP_MIN (-50.0f)
+#define TEMP_MAX 60.0f
+
+#define MAX_RELEVES 24
 
 // --- function prototypes (scope: public) -----------
 

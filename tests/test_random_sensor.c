@@ -7,6 +7,7 @@
 #include "unity.h"             // Needed for Unity assertions
 #include "capteur.h"        // Module under test
 #include "test_random_sensor.h"
+#include "config.h"
 
 // --- defines and macros ----------------------------
 #define TESTS_SEED 42u

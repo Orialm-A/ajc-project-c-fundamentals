@@ -10,6 +10,7 @@
 
 // --- includes --------------------------------------
 #include "capteur.h"
+#include "config.h"
 #include <stdio.h>
 #include <math.h>
 #include <time.h>

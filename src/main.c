@@ -4,6 +4,7 @@
 #include "alertes.h"
 #include "affichage.h"
 #include "capteur.h"
+#include "config.h"
 
 
 int main(void)
