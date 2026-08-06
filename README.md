@@ -54,6 +54,7 @@ just run
 | `just utest-build`   | Configure and build the Unity test suite          |
 | `just utest-run`     | Run the test suite via `ctest`                    |
 | `just utest-rebuild` | Clean and rebuild the test suite                  |
+| `just check`         | Run `cppcheck` static analysis over `src/`        |
 | `just clean`         | Remove all build directories                      |
 
 ## Project layout
@@ -72,7 +73,32 @@ resources/  Exercise instructions
 - Function-pointer based sensor abstraction: manual entry, random simulation, or CSV file
 - CMake build system
 - Unity unit tests
-- GitHub Actions CI (runs the unit tests on every push/PR)
+- GitHub Actions CI: build, unit tests, and static analysis on every push/PR
+
+## Continuous Integration
+
+Three workflows run on every push/PR (`.github/workflows/`):
+
+| Workflow      | Runs                    | Blocks the pipeline on failure? |
+|---------------|--------------------------|----------------------------------|
+| `tests.yml`   | `just utest-build` + `just utest-run` | Yes |
+| `build.yml`   | `just build`             | Yes |
+| `quality.yml` | `just check` (`cppcheck --enable=all`) | **No — informational only** |
+
+`quality.yml` is currently non-blocking on purpose: `cppcheck` exits `0` regardless of how many
+issues it reports, unless told otherwise. We're keeping it that way while the existing findings
+across the codebase get cleared gradually (see `resources/TODO.md`) — instead of turning every
+push into a red X for a backlog that predates the check.
+
+Once the codebase is clean, add `--error-exitcode=1` to the `cppcheck` invocation in the `check`
+recipe (`justfile`) to make the workflow actually fail when `cppcheck` finds something — at that
+point `quality.yml` becomes a real gate instead of a report nobody's forced to read. This is a
+one-line change whenever we're ready to make that call.
+
+This mirrors the staged approach `INSTRUCTIONS_PART_3.md` describes (its GitLab CI pipeline only
+makes the `main` branch protection depend on a green pipeline in its Partie 5, after the BUILD/
+TEST/QUALITY stages already exist) — adapted here to GitHub Actions instead of GitLab CI, since
+the project already lives on GitHub.
 
 ## Known limitations
 

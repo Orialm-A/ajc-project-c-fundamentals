@@ -28,7 +28,7 @@
  * @pre n > 0
  */
 float calculer_moyenne(
-    float *tab, ///< Array of values
+    const float *tab, ///< Array of values
     int n ///< Length of the array
 );
 
@@ -39,7 +39,7 @@ float calculer_moyenne(
  * @pre n > 0
  */
 float trouver_minimum(
-    float *tab, ///< Array of values
+    const float *tab, ///< Array of values
     int n, ///< Length of the array
     int *idx ///< Index of the minimum value
 
@@ -52,7 +52,7 @@ float trouver_minimum(
  * @pre n > 0
  */
 float trouver_maximum(
-    float *tab, ///< Array of values
+    const float *tab, ///< Array of values
     int n, ///< Length of the array
     int *idx ///< Index of the maximum value
 
@@ -65,7 +65,7 @@ float trouver_maximum(
  * @pre n > 0
  */
 float calculer_amplitude(
-    float *tab, ///< Array of values
+    const float *tab, ///< Array of values
     int n ///< Length of the array
 );
 

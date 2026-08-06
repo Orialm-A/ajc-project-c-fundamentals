@@ -44,3 +44,7 @@ utest-run:
 # Remove all build directories
 clean:
     rm -rf build
+
+# Check code quality
+check:
+    cppcheck --enable=all --std=c11 --language=c -I include src/*.c
