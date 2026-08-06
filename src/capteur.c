@@ -89,10 +89,16 @@ int capteur_csv_init(const char *chemin)
                 }
                 else
                 {
-                    if((val < TEMP_MIN) || (val > TEMP_MAX))
+                    if(val < TEMP_MIN)
                     {
-                        fwrite("VALEUR HORS PLAGE", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                        val = TEMP_MIN;
                     }
+                    else if(val > TEMP_MAX)
+                    {
+                        val = TEMP_MAX;
+                    }
+                    
+                    fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
 
                     csv_data[csv_count++] = val;
                 }
