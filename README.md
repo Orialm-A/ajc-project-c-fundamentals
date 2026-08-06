@@ -1,5 +1,5 @@
 # TP - C Weather Station
-
+Bonjour
 ## Context
 
 This repository contains our work for the AJC training, the first TP on C fundamentals.
