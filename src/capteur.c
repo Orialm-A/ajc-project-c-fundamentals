@@ -82,15 +82,29 @@ int capteur_csv_init(const char *chemin)
         {
             if((ligne[0] != '#') && (ligne[0] != '\n') && (ligne[0] != '\r'))
             {
-                sscanf(ligne, "%f", &val);
-
-                if((val < TEMP_MIN) || (val > TEMP_MAX))
+                if(sscanf(ligne, "%f", &val) != 1)
                 {
-                    fwrite("VALEUR HORS PLAGE", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                    printf("ERREUR de lecture de %s a la ligne %d. Passage a la ligne suivante\n", chemin, (csv_count+1));
+                    csv_count++;
                 }
-
-                csv_data[csv_count++] = val;
+                else
+                {
+                    if((val < TEMP_MIN))
+                    {
+                        val = TEMP_MIN;
+                    }
+                    else if(val > TEMP_MAX)
+                    {
+                        val = TEMP_MAX;
+                    }
+                    
+                    fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                    
+                    csv_data[csv_count++] = val;
+                }
             }
+            
+            fgets(ligne, sizeof(ligne), ptr_file);
         }
 
         csv_ready = 1;
