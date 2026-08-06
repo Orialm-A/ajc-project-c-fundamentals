@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void analyser_alertes(float *tab, int n, Config *cfg)
+void analyser_alertes(const float *tab, int n, const Config *cfg)
 {
     bool alerte_canicule = false;
     bool alerte_gel = false;

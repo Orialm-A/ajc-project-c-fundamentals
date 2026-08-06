@@ -5,10 +5,10 @@
 
 void afficher_menu(void);
 
-void afficher_historigramme(float * tab, int taille);
+void afficher_historigramme(const float * tab, int taille);
 
 void modification_alertes(Config * cfg);
 
-void afficher_rapport(float *tab, int n);
+void afficher_rapport(const float *tab, int n);
 
 #endif

@@ -9,6 +9,6 @@ typedef struct
     float seuil_amplitude;  /* alerte ECART si amplitude >= seuil      */
 } Config;
 
-void analyser_alertes(float *tab, int n, Config *cfg);
+void analyser_alertes(const float *tab, int n, const Config *cfg);
 
 #endif
