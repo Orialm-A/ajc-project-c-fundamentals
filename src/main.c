@@ -40,14 +40,22 @@ int main(void)
             }
             break;
             
-            case 2:
-                printf("Moyenne  : %.2f\n", calculer_moyenne(temperatures, 24));
-                printf("Minimale : %.2f Heure : %d\n", trouver_minimum(temperatures, 24, &min_idx), min_idx);
-                printf("Maximale : %.2f Heure : %d\n", trouver_maximum(temperatures, 24, &max_idx), max_idx);
+            case 2: {
+                /* I separated the call from the printf. Why?
+                 * tldr, C doesn't guarantee call/evaluation order,
+                 * so `max_idx` could have any value when evaluated for the print. */
+                float moyenne = calculer_moyenne(temperatures, nb_releves);
+                float min = trouver_minimum(temperatures, nb_releves, &min_idx);
+                float max = trouver_maximum(temperatures, nb_releves, &max_idx);
+
+                printf("Moyenne  : %.2f\n", moyenne);
+                printf("Minimale : %.2f Heure : %d\n", min, min_idx);
+                printf("Maximale : %.2f Heure : %d\n", max, max_idx);
+            }
             break;
 
             case 3:
-                analyser_alertes(temperatures, 24, &config);
+                analyser_alertes(temperatures, nb_releves, &config);
             break;
 
             case 4:
@@ -55,7 +63,7 @@ int main(void)
             break;
 
             case 5:
-                afficher_historigramme(temperatures, 24, config);
+                afficher_historigramme(temperatures, nb_releves, config);
             break;
 
             default:
