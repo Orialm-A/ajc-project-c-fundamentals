@@ -113,7 +113,8 @@ float capteur_csv(int heure)
 
 void  capteur_csv_fermer(void)
 {
-
+    csv_count = 0;
+    csv_ready = 0;
 }
 
 /* Collecteur générique */
