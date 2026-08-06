@@ -38,3 +38,15 @@ void afficher_menu(void)
     printf("0. Quitter\n");
     printf("Choix : ");
 }
+
+void modification_alertes(Config * cfg)
+{
+    printf("Nouveau seuil de canicule : ");
+    scanf("%f", &cfg->seuil_chaud);
+
+    printf("Nouveau seuil de gel : ");
+    scanf("%f", &cfg->seuil_froid);
+
+    printf("Nouveau seuil d'amplitude : ");
+    scanf("%f", &cfg->seuil_amplitude);
+}

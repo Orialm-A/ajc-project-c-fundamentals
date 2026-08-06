@@ -7,4 +7,6 @@ void afficher_menu(void);
 
 void afficher_historigramme(float * tab, int taille, Config cfg);
 
+void modification_alertes(Config * cfg);
+
 #endif

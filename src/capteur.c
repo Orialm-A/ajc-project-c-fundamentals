@@ -78,9 +78,7 @@ int capteur_csv_init(const char *chemin)
 
     if(ptr_file != NULL)
     {
-        fgets(ligne, sizeof(ligne), ptr_file);
-
-        while(ligne[0] != EOF)
+        while(fgets(ligne, sizeof(ligne), ptr_file) != NULL)
         {
             if((ligne[0] != '#') && (ligne[0] != '\n') && (ligne[0] != '\r'))
             {
@@ -93,11 +91,11 @@ int capteur_csv_init(const char *chemin)
 
                 csv_data[csv_count++] = val;
             }
-
-            fgets(ligne, sizeof(ligne), ptr_file);
         }
 
         csv_ready = 1;
+
+        fclose(ptr_file);
 
         return csv_count;
     }

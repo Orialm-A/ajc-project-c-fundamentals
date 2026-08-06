@@ -14,7 +14,7 @@ int main(void)
     float temperatures[24] = {-50.0, -45.0, -40.0, -35.0, -30.0, -25.0, -20.0, -15.0, -10.0, -5.0, 0.0, 5.0,
                               10.0, 15.0, 17.5, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0};
 
-    Config config = {.seuil_chaud = 35.0, .seuil_froid = -10.0, .seuil_amplitude = 20.0};
+    Config config = {.seuil_chaud = 35.0, .seuil_froid = 0.0, .seuil_amplitude = 20.0};
 
     int min_idx, max_idx;
     int nb_releves = 0;
@@ -42,8 +42,8 @@ int main(void)
             
             case 2:
                 printf("Moyenne  : %.2f\n", calculer_moyenne(temperatures, 24));
-                printf("Minimale : %.2f\n", trouver_minimum(temperatures, 24, &min_idx));
-                printf("Maximale : %.2f\n", trouver_maximum(temperatures, 24, &max_idx));
+                printf("Minimale : %.2f Heure : %d\n", trouver_minimum(temperatures, 24, &min_idx), min_idx);
+                printf("Maximale : %.2f Heure : %d\n", trouver_maximum(temperatures, 24, &max_idx), max_idx);
             break;
 
             case 3:
