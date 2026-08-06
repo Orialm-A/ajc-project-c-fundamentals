@@ -47,4 +47,4 @@ clean:
 
 # Check code quality
 check:
-    cppcheck --enable=all --std=c11 --language=c -I include src/*.c
+    cppcheck --enable=all --std=c11 --language=c -I include --suppress=missingIncludeSystem --error-exitcode=1 src/*.c
