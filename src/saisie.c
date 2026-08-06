@@ -1,12 +1,16 @@
 #include "saisie.h"
 #include "capteur.h"
 #include <stdio.h>
+#include <string.h>
+
+#define BUFFER_FILE_PATH_SIZE 128
+
+static void helper_csv_choice(void);
 
 fn_capteur choisir_capteur(void) {
 
     int choix_utilisateur = 1u;
     int user_seed;
-    int error_code;
 
     printf("--- Source de donnees ---\n");
     printf("  1. Saisie manuelle (clavier)\n");
@@ -15,7 +19,11 @@ fn_capteur choisir_capteur(void) {
     printf("  0. Annuler\n");
 
     scanf("%d", &choix_utilisateur);
-    printf("\n");
+    putchar('\n');
+    {
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 
     switch(choix_utilisateur)
     {
@@ -41,10 +49,7 @@ fn_capteur choisir_capteur(void) {
         break;
 
         case 3:
-            error_code = capteur_csv_init("data/releves.csv");
-            if(error_code == -1) {
-                return NULL;
-            }
+            helper_csv_choice();
             return capteur_csv;
             break;
 
@@ -101,4 +106,25 @@ void action_saisir(float *tab, int *nb_releves, int n_max, fn_capteur fn) {
         scanf("%d", nb_releves);
     }
     collecter_releves(tab, *nb_releves, fn);
+}
+
+static void helper_csv_choice(){
+    int error_code;
+    const char *DEFAULT_FILE = "data/releves.csv"; // 16 + 1
+    char file_to_use[BUFFER_FILE_PATH_SIZE];
+    strcpy(file_to_use, DEFAULT_FILE); // Safe as 16 + 1 < 128
+
+    do {
+        error_code = capteur_csv_init(file_to_use);
+
+        if (error_code == -1) {
+            printf("ERREUR : fichier introuvable (%s). Veuillez saisir un chemin valide : ", file_to_use);
+            // No `scanf`!, this other API allow to enforce the size!!
+            if(fgets(file_to_use, BUFFER_FILE_PATH_SIZE, stdin) != NULL) {
+                file_to_use[strcspn(file_to_use, "\n")] = '\0';
+            } else {
+                printf("ERREUR : lecture invalide. Veuillez reessayer.\n");
+            }
+        }
+    } while (error_code == -1);
 }

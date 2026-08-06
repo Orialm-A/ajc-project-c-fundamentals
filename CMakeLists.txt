@@ -4,6 +4,7 @@ project(MyProject LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
 option(ENABLE_TESTS "Build unit tests using Unity" OFF)
 
@@ -18,6 +19,11 @@ add_executable(my_app
     src/saisie.c
     src/affichage.c
     src/capteur.c
+)
+
+target_compile_options(my_app PRIVATE
+    -Wall
+    -Wextra
 )
 
 target_include_directories(my_app PRIVATE

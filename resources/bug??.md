@@ -57,4 +57,4 @@ Amplitude globale : 95.00 C [ECART]
 
 ```
 
-What happened to hours 3 to 23? Are these default values??
+What happened to hours 3 to 23? Are these default values?? I typed only 0 to 2.

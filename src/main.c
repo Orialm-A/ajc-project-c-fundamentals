@@ -3,23 +3,20 @@
 #include "saisie.h"
 #include "alertes.h"
 #include "affichage.h"
-#include "statistics.h"
 #include "capteur.h"
 
 
 int main(void)
 {
-    int choix_utilisateur = 1u;
+    int choix_utilisateur;
 
-    float temperatures[24] = {-50.0, -45.0, -40.0, -35.0, -30.0, -25.0, -20.0, -15.0, -10.0, -5.0, 0.0, 5.0,
-                              10.0, 15.0, 17.5, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0};
+    float temperatures[24] = {0.0f};
 
-    Config config = {.seuil_chaud = 35.0, .seuil_froid = -10.0, .seuil_amplitude = 20.0};
+    Config config = {.seuil_chaud = 35.0, .seuil_froid = 0.0, .seuil_amplitude = 20.0};
 
-    int min_idx, max_idx;
     int nb_releves = 0;
 
-    while(choix_utilisateur != 0)
+    do
     {
 
         afficher_menu();
@@ -33,21 +30,19 @@ int main(void)
             break;
 
             case 1: {
-                fn_capteur fn = choisir_capteur();
-                if (fn == NULL) { printf("Annule.\n"); break; }
-                action_saisir(temperatures, &nb_releves, MAX_RELEVES, fn);
-                if (fn == capteur_csv) capteur_csv_fermer();
-            }
-            break;
+                    fn_capteur fn = choisir_capteur();
+                    if (fn == NULL) { printf("Annule.\n"); break; }
+                    action_saisir(temperatures, &nb_releves, MAX_RELEVES, fn);
+                    if (fn == capteur_csv) capteur_csv_fermer();
+                }
+                break;
             
             case 2:
-                printf("Moyenne  : %.2f\n", calculer_moyenne(temperatures, 24));
-                printf("Minimale : %.2f\n", trouver_minimum(temperatures, 24, &min_idx));
-                printf("Maximale : %.2f\n", trouver_maximum(temperatures, 24, &max_idx));
-            break;
+                afficher_rapport(temperatures, nb_releves);
+                break;
 
             case 3:
-                analyser_alertes(temperatures, 24, &config);
+                analyser_alertes(temperatures, nb_releves, &config);
             break;
 
             case 4:
@@ -55,7 +50,7 @@ int main(void)
             break;
 
             case 5:
-                afficher_historigramme(temperatures, 24, config);
+                afficher_historigramme(temperatures, nb_releves);
             break;
 
             default:
@@ -64,7 +59,7 @@ int main(void)
         }
 
         printf("\n");
-    }
+    } while(choix_utilisateur != 0);
 
     return 0;
 }
