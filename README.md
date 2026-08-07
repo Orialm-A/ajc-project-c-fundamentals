@@ -79,33 +79,27 @@ resources/  Exercise instructions
 
 Three workflows run on every push/PR (`.github/workflows/`):
 
-| Workflow      | Runs                    | Blocks the pipeline on failure? |
-|---------------|--------------------------|----------------------------------|
-| `tests.yml`   | `just utest-build` + `just utest-run` | Yes |
-| `build.yml`   | `just build`             | Yes |
-| `quality.yml` | `just check` (`cppcheck --enable=all`) | **No — informational only** |
+| Workflow      | Runs                    | Fails on issues? | Required to merge? |
+|---------------|--------------------------|-------------------|----------------------|
+| `tests.yml`   | `just utest-build` + `just utest-run` | Yes | Yes |
+| `build.yml`   | `just build`             | Yes | Yes |
+| `quality.yml` | `just check` (`cppcheck --enable=all`) | Yes | **No** |
 
-`quality.yml` is currently non-blocking on purpose: `cppcheck` exits `0` regardless of how many
-issues it reports, unless told otherwise. We're keeping it that way while the existing findings
-across the codebase get cleared gradually (see `resources/TODO.md`) — instead of turning every
-push into a red X for a backlog that predates the check.
-
-Once the codebase is clean, add `--error-exitcode=1` to the `cppcheck` invocation in the `check`
-recipe (`justfile`) to make the workflow actually fail when `cppcheck` finds something — at that
-point `quality.yml` becomes a real gate instead of a report nobody's forced to read. This is a
-one-line change whenever we're ready to make that call.
+`quality.yml`'s `check` recipe now runs with `--error-exitcode=1`, so the workflow itself fails
+when `cppcheck` finds something, instead of always reporting green regardless of output.
 
 This mirrors the staged approach `INSTRUCTIONS_PART_3.md` describes (its GitLab CI pipeline only
 makes the `main` branch protection depend on a green pipeline in its Partie 5, after the BUILD/
 TEST/QUALITY stages already exist) — adapted here to GitHub Actions instead of GitLab CI, since
 the project already lives on GitHub.
 
-## Known limitations
+### Branch protection
 
-- The CSV sensor backend (`capteur_csv`/`capteur_csv_init`/`capteur_csv_fermer` in
-  `src/capteur.c`) is not implemented yet — manual entry and random simulation work end to end.
-- No `data/*.csv` sample files are checked in yet, so the CSV mode can't be exercised even once
-  the backend is done without adding one.
+`main` requires a pull request — no direct pushes or browser-editor commits land without one —
+and requires the `unit-tests` and `build` checks to pass before the merge button unlocks.
+`quality` is intentionally left out of that required list: it fails loudly on findings (see
+above), but doesn't block a merge by itself, so a PR isn't stuck behind unrelated pre-existing
+cppcheck noise elsewhere in the codebase.
 
 ## Todo
 
