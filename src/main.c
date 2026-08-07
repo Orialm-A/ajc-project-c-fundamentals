@@ -4,73 +4,32 @@
 #include "alertes.h"
 #include "affichage.h"
 #include "capteur.h"
+#include "menu_actions.h"
 
+static action_t actions[6] = {
+    action_case_0,
+    action_case_1,
+    action_case_2,
+    action_case_3,
+    action_case_4,
+    action_case_5
+};
 
 int main(void)
 {
-    int choix_utilisateur;
-
-    float temperatures[24] = {0.0f};
-
-    Config config = {.seuil_chaud = 35.0, .seuil_froid = 0.0, .seuil_amplitude = 20.0};
-
-    int nb_releves = 0;
-
+    int choix;
     do
     {
 
         afficher_menu();
-        scanf("%d", &choix_utilisateur);
+        scanf("%d", &choix);
         printf("\n");
         
-        switch(choix_utilisateur)
-        {
-            case 0:
-                printf("Fin du programme");
-            break;
-
-            case 1: {
-                    fn_capteur fn = choisir_capteur();
-                    if (fn == NULL) { printf("Annule.\n"); break; }
-
-                    int n_max = MAX_RELEVES;
-                    if (fn == capteur_csv) {
-                        n_max = capteur_csv_nb_valeurs();
-                        if (n_max < 1) {
-                            printf("ERREUR : le fichier CSV ne contient aucune valeur exploitable.\n");
-                            capteur_csv_fermer();
-                            break;
-                        }
-                    }
-
-                    action_saisir(temperatures, &nb_releves, n_max, fn);
-                    if (fn == capteur_csv) capteur_csv_fermer();
-                }
-                break;
-            
-            case 2:
-                afficher_rapport(temperatures, nb_releves);
-                break;
-
-            case 3:
-                analyser_alertes(temperatures, nb_releves, &config);
-            break;
-
-            case 4:
-                modification_alertes(&config);
-            break;
-
-            case 5:
-                afficher_historigramme(temperatures, nb_releves);
-            break;
-
-            default:
-                printf("ERREUR !! La valeur doit etre entre 0 et 6\n");
-            break;
-        }
+        if (choix >= 0 && choix <= 5) actions[choix]();
+        else printf("ERREUR !! La valeur doit etre entre 0 et 6\n");
 
         printf("\n");
-    } while(choix_utilisateur != 0);
+    } while(choix != 0);
 
     return 0;
 }

@@ -19,6 +19,7 @@ add_executable(my_app
     src/saisie.c
     src/affichage.c
     src/capteur.c
+    src/menu_actions.c
 )
 
 target_compile_options(my_app PRIVATE
