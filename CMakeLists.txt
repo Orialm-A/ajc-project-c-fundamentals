@@ -46,6 +46,7 @@ if(ENABLE_TESTS)
         tests/test_main.c
         tests/test_statistics.c
         tests/test_random_sensor.c
+        tests/test_csv_sensor.c
 
         src/statistics.c
         src/capteur.c
