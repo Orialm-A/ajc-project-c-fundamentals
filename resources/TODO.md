@@ -1,14 +1,14 @@
 # TODO — Station Météo : ce qui reste
 
-> Mis à jour après les corrections sur `fix_todo` (voir `git log` pour le détail). Tout ce qui
-> était côté Orialm est traité ; ce qui reste est soit côté Antoine (Partie 5 CSV), soit
-> optionnel (bonus, tests, polish cosmétique).
+> Partie 5 (capteur CSV) est maintenant complète et fonctionnelle (voir `git log` pour le
+> détail — `capteur_csv()` implémentée, bug de double-lecture corrigé, dépassement de
+> `csv_data` impossible, valeurs `NaN`/hors plage gérées). Ce qui reste est optionnel :
+> bonus, tests, polish cosmétique.
 
 ## Ex.2 — Rapport d'analyse (polish cosmétique, optionnel)
 
-`afficher_rapport()` existe maintenant dans `affichage.c`/`.h` et affiche Moyenne/Min/Max
-(+ heure)/Amplitude — fonctionnellement complet. Reste, si on veut coller exactement au format
-du sujet :
+`afficher_rapport()` existe dans `affichage.c`/`.h` et affiche Moyenne/Min/Max (+ heure)/
+Amplitude — fonctionnellement complet. Reste, si on veut coller exactement au format du sujet :
 - Le sujet attend `--- Rapport d'analyse ---` en en-tête ; pas fait.
 - Le sujet utilise "Minimum"/"Maximum", le code utilise "Minimale"/"Maximale".
 
@@ -20,25 +20,19 @@ Non fait — bonus, pas bloquant.
 
 - `include/config.h` n'existe toujours pas en tant que fichier dédié (le sujet le demande),
   mais `MAX_RELEVES`/`TEMP_MIN`/`TEMP_MAX` sont publiques dans `capteur.h` et effectivement
-  utilisées partout où il faut (`main.c`, `capteur.c`). Impact fonctionnel nul, question
-  purement d'organisation si on veut coller à la structure de fichiers du sujet.
+  utilisées partout où il faut. Impact fonctionnel nul, question purement d'organisation.
 
-## Partie 5 (`INSTRUCTIONS_PART_2.md`) — Capteur CSV (côté Antoine, voir `resources/message_antoine.md`)
+## Partie 5 (`INSTRUCTIONS_PART_2.md`) — Capteur CSV
 
-- `capteur_csv()` : stub, retourne toujours `0.0`.
-- `capteur_csv_fermer()` : corps vide. **Confirmé avec gdb : provoque un vrai crash**
-  (buffer overflow) si CSV est sélectionné deux fois dans la même exécution, `csv_count`
-  n'étant jamais remis à zéro.
-- `capteur_csv_init()` : ne vérifie pas le retour de `sscanf`, ne clampe pas les valeurs hors
-  plage.
-- `data/releves_hiver.csv` toujours absent (`data/releves.csv` ajouté sur `fix_todo`).
+Fonctionnellement complète. Reste, non-bloquant :
+- `data/releves_hiver.csv` toujours absent (`data/releves.csv` présent et fonctionnel).
 - Bonus `capteur_volatile` — non fait.
 
 ## Tests unitaires à écrire (faciles — pas de stdin/stdout à intercepter)
 
-Seuls `statistics.c` et `capteur_aleatoire` (bornes) sont couverts aujourd'hui. Ce qui suit
-est testable sans trucage de flux — fonctions pures ou lecture de fichier simple. Tout ce qui
-pilote un prompt (`scanf`) ou dont le seul comportement observable est un `printf` est
+Seuls `statistics.c` et les bornes de `capteur_aleatoire` sont couverts aujourd'hui. Ce qui
+suit est testable sans trucage de flux — fonctions pures ou lecture de fichier simple. Tout ce
+qui pilote un prompt (`scanf`) ou dont le seul comportement observable est un `printf` est
 volontairement exclu, cf. dernière section.
 
 ### `collecter_releves()` (`capteur.c`) — non testée du tout actuellement
@@ -55,7 +49,7 @@ volontairement exclu, cf. dernière section.
   devrait produire des valeurs différentes (basé sur `time(NULL)`) — à ne garder que si ça
   n'introduit pas de flakiness en CI.
 
-### `capteur_csv_init()` / `capteur_csv()` / `capteur_csv_fermer()` — une fois la Partie 5 codée
+### `capteur_csv_init()` / `capteur_csv()` / `capteur_csv_fermer()` — Partie 5 codée, tests à écrire
 Pas de prompt ici (contrairement à `capteur_manuel`), juste de la lecture de fichier — donc
 testable en écrivant un petit fichier CSV de test dans le test lui-même (fichier temporaire
 dédié, pas besoin des fixtures officielles `data/*.csv`) :
@@ -64,12 +58,11 @@ dédié, pas besoin des fixtures officielles `data/*.csv`) :
 - Lignes commentaires (`#...`) et lignes vides correctement ignorées (absentes du compte).
 - `capteur_csv(heure)` retourne la bonne valeur pour un index valide, et la sentinelle
   (`TEMP_MIN - 1.0f`) pour un index hors bornes ou avant tout appel à `capteur_csv_init()`.
-- Une valeur hors plage dans le fichier de test est bien clampée (une fois ce comportement
-  codé).
+- Une valeur hors plage dans le fichier de test est bien clampée.
 - `capteur_csv_fermer()` remet l'état à zéro : `capteur_csv()` appelée après fermeture doit
   retourner la sentinelle, même pour un index auparavant valide.
 - Appeler `capteur_csv_init()` deux fois de suite (sans `fermer()` entre les deux) ne doit pas
-  dépasser les bornes de `csv_data` — reproduit le crash trouvé avec gdb.
+  dépasser les bornes de `csv_data` — reproduit le crash trouvé avec gdb, maintenant corrigé.
 
 ### Volontairement pas prévu (nécessiterait d'intercepter stdin/stdout)
 - `capteur_manuel`, `saisir_releves`, `action_saisir`, `choisir_capteur`,
