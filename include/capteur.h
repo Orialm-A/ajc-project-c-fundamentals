@@ -45,6 +45,7 @@ float capteur_aleatoire(int heure);
 int   capteur_csv_init(const char *chemin);
 float capteur_csv(int heure);
 void  capteur_csv_fermer(void);
+int   capteur_csv_nb_valeurs(void);
 
 /* Collecteur générique */
 void  collecter_releves(float *tab, int n, fn_capteur fn);

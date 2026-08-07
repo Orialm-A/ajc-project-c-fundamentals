@@ -32,7 +32,18 @@ int main(void)
             case 1: {
                     fn_capteur fn = choisir_capteur();
                     if (fn == NULL) { printf("Annule.\n"); break; }
-                    action_saisir(temperatures, &nb_releves, MAX_RELEVES, fn);
+
+                    int n_max = MAX_RELEVES;
+                    if (fn == capteur_csv) {
+                        n_max = capteur_csv_nb_valeurs();
+                        if (n_max < 1) {
+                            printf("ERREUR : le fichier CSV ne contient aucune valeur exploitable.\n");
+                            capteur_csv_fermer();
+                            break;
+                        }
+                    }
+
+                    action_saisir(temperatures, &nb_releves, n_max, fn);
                     if (fn == capteur_csv) capteur_csv_fermer();
                 }
                 break;

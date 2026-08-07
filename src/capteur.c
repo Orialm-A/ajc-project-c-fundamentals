@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#include <stdbool.h>
 
 // --- typedefs and structures -----------------------
 
@@ -76,35 +77,51 @@ int capteur_csv_init(const char *chemin)
     char ligne[64] = {0};
     float val;
 
+    csv_count = 0;
+    csv_ready = 0;
+
     if(ptr_file != NULL)
     {
+        int numero_ligne = 0;
+
         while(fgets(ligne, sizeof(ligne), ptr_file) != NULL)
         {
+            numero_ligne++;
+
             if((ligne[0] != '#') && (ligne[0] != '\n') && (ligne[0] != '\r'))
             {
-                if(sscanf(ligne, "%f", &val) != 1)
+                if((sscanf(ligne, "%f", &val) != 1) || !isfinite(val))
                 {
-                    printf("ERREUR de lecture de %s a la ligne %d. Passage a la ligne suivante\n", chemin, (csv_count+1));
-                    csv_count++;
+                    printf("ERREUR de lecture de %s a la ligne %d. Ligne ignoree.\n", chemin, numero_ligne);
+                }
+                else if(csv_count >= MAX_RELEVES)
+                {
+                    printf("ERREUR : %s contient plus de %d valeurs, le reste est ignore.\n", chemin, MAX_RELEVES);
+                    break;
                 }
                 else
                 {
+                    bool hors_plage = false;
+
                     if(val < TEMP_MIN)
                     {
                         val = TEMP_MIN;
+                        hors_plage = true;
                     }
                     else if(val > TEMP_MAX)
                     {
                         val = TEMP_MAX;
+                        hors_plage = true;
                     }
-                    
-                    fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+
+                    if(hors_plage)
+                    {
+                        fwrite("VALEUR HORS PLAGE\n", sizeof(char), sizeof("VALEUR HORS PLAGE"), stderr);
+                    }
 
                     csv_data[csv_count++] = val;
                 }
             }
-
-            fgets(ligne, sizeof(ligne), ptr_file);
         }
 
         csv_ready = 1;
@@ -122,7 +139,17 @@ int capteur_csv_init(const char *chemin)
 
 float capteur_csv(int heure)
 {
-    return 0.0;
+    if((csv_ready == 1) && (heure >= 0) && (heure < csv_count))
+    {
+        return csv_data[heure];
+    }
+
+    return (TEMP_MIN - 1.0f);
+}
+
+int capteur_csv_nb_valeurs(void)
+{
+    return (csv_ready == 1) ? csv_count : 0;
 }
 
 void  capteur_csv_fermer(void)
