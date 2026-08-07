@@ -65,9 +65,11 @@ void afficher_rapport(const float *tab, int n) {
     float max = trouver_maximum(tab, n, &max_idx);
     float amplitude = calculer_amplitude(tab, n);
 
-    printf("Moyenne   : %.2f°C\n", moyenne);
-    printf("Minimale  : %.2f°C Heure : %d\n", min, min_idx);
-    printf("Maximale  : %.2f°C Heure : %d\n", max, max_idx);
-    printf("Amplitude : %.2f°C Entre %dh et %dh\n", amplitude, min_idx, max_idx);
+    printf("--- Rapport d'analyse ---\n");
+
+    printf("Moyenne  : %.2f°C\n", moyenne);
+    printf("Minimum  : %.2f°C Heure : %d\n", min, min_idx);
+    printf("Maximum  : %.2f°C Heure : %d\n", max, max_idx);
+    printf("Amplitude: %.2f°C Entre %dh et %dh\n", amplitude, min_idx, max_idx);
 
 }

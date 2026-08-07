@@ -27,8 +27,15 @@
 static float csv_data[MAX_RELEVES];
 static int   csv_count = 0;
 static int   csv_ready = 0;
+static volatile float SENSOR_REG = 0.0f;
 
 // --- function implementations (scope: module) ------
+
+static void simuler_irq(void)
+{
+    /* En embarqué réel : cette fonction serait un ISR */
+    SENSOR_REG = 10.0f + ((float)rand() / RAND_MAX) * 30.0f;
+}
 
 // --- function implementations (scope: public) ------
 
@@ -164,4 +171,11 @@ void collecter_releves(float *tab, int n, fn_capteur fn)
     for (int i = 0; i < n; i++) {
         tab[i] = fn(i);
     }
+}
+
+float capteur_volatile(int heure)
+{
+    (void)heure;     /* paramètre non utilisé */
+    simuler_irq();
+    return SENSOR_REG;
 }
