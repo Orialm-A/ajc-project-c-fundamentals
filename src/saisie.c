@@ -15,6 +15,7 @@ fn_capteur choisir_capteur(void) {
     printf("  1. Saisie manuelle (clavier)\n");
     printf("  2. Simulation aleatoire\n");
     printf("  3. Fichier CSV (data/releves.csv)\n");
+    printf("  4. Capteur materiel (simule)\n");
     printf("  0. Annuler\n");
 
     scanf("%d", &choix_utilisateur);
@@ -51,6 +52,10 @@ fn_capteur choisir_capteur(void) {
         case 3:
             helper_csv_choice();
             return capteur_csv;
+            break;
+
+        case 4:
+            return capteur_volatile;
             break;
 
         case 0:

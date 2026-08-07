@@ -47,4 +47,6 @@ int   capteur_csv_nb_valeurs(void);
 /* Collecteur générique */
 void  collecter_releves(float *tab, int n, fn_capteur fn);
 
+float capteur_volatile(int heure);
+
 #endif /* CAPTEUR_H */
